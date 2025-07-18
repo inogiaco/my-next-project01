@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@emailjs/browser": "^4.4.1",
     "classnames": "^2.5.1",
     "dayjs": "^1.11.10",
     "microcms-js-sdk": "^3.1.0",

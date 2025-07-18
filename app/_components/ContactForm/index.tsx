@@ -3,20 +3,50 @@
 import { createContactData } from "@/app/_actions/contact";
 import { useFormState } from "react-dom";
 import styles from "./index.module.css";
+import emailjs from '@emailjs/browser'; // EmailJSをインポート
 
 const initialState = {
     status: "",
     message: "",
+    data: null, // フォームデータを保持するためのフィールドを追加
 };
 
 export default function ContactForm(){
     const [state, formAction] = useFormState(createContactData, initialState);
-    console.log(state);
-    if (state.status === "success") {
+
+    // state.statusが'success'で、かつdataが存在する場合にEmailJSを送信
+    if (state.status === "success" && state.data) {
+        const { lastname, firstname, company, email, message } = state.data;
+
+        // EmailJSのテンプレート変数に合わせたオブジェクトを作成
+        const templateParams = {
+            lastname,
+            firstname,
+            company,
+            email,
+            message,
+        };
+
+        emailjs.send(
+            process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
+            process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!,
+            templateParams,
+            process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY!
+        )
+        .then((response) => {
+            console.log('SUCCESS!', response.status, response.text);
+            // ここでユーザーに成功メッセージを表示するなどの処理を追加できます
+            // 例: stateを更新して成功メッセージを表示
+        })
+        .catch((err) => {
+            console.log('FAILED...', err);
+            // ここでユーザーにエラーメッセージを表示するなどの処理を追加できます
+            // 例: stateを更新してエラーメッセージを表示
+        });
+
         return(
             <p className={styles.success}>
-                お問い合わせいただき、ありがとうございます。
-                <br />
+                お問い合わせいただき、ありがとうございます。<br />
                 お返事まで今しばらくお待ち下さい。
             </p>
         );

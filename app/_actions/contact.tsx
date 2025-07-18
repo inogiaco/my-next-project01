@@ -1,7 +1,7 @@
 "use server"
 
 function validateEmail(email: string) {
-    const pattern = /^[^\s@]+@[^\s@]+$/;
+    const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return pattern.test(email);
 }
 
@@ -51,5 +51,6 @@ export async function createContactData(_prevState: any, formData: FormData) {
         };
     }
 
-    return { status: "success", message: "OK" };
+    // バリデーションが成功したらフォームデータを返す
+    return { status: "success", data: rawFormData };
 }
