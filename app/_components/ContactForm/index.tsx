@@ -8,7 +8,7 @@ import emailjs from '@emailjs/browser'; // EmailJSをインポート
 const initialState = {
     status: "",
     message: "",
-    data: null, // フォームデータを保持するためのフィールドを追加
+    data: undefined, // フォームデータを保持するためのフィールドを追加
 };
 
 export default function ContactForm(){
