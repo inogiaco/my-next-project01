@@ -1,5 +1,6 @@
 "use client"
 
+import { sendGAEvent } from "@next/third-parties/google";
 import { createContactData } from "@/app/_actions/contact";
 import { useFormState } from "react-dom";
 import styles from "./index.module.css";
@@ -13,6 +14,10 @@ const initialState = {
 
 export default function ContactForm(){
     const [state, formAction] = useFormState(createContactData, initialState);
+
+    const handleSubmit = () => {
+        sendGAEvent({ event: "contact", value: "submit" });
+    }
 
     // state.statusが'success'で、かつdataが存在する場合にEmailJSを送信
     if (state.status === "success" && state.data) {
@@ -53,7 +58,7 @@ export default function ContactForm(){
     }    
 
     return(
-        <form className={styles.form} action={formAction}>
+        <form className={styles.form} action={formAction} onSubmit={handleSubmit}>
             <div className={styles.horizontal}>
                 <div className={styles.item}>
                     <label className={styles.labgel} htmlFor="lastname">
